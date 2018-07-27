@@ -28,6 +28,7 @@
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace Xe.Tools.Wpf.Dialogs
@@ -53,18 +54,21 @@ namespace Xe.Tools.Wpf.Dialogs
 
         public Behavior CurrentBehavior { get; }
 
-        public Type CurrentType { get; }
+		public string DefaultFileName
+		{
+			get => _fd.DefaultFileName;
+			set => _fd.DefaultFileName = value;
+		}
 
-        public string FileName => _fd.FileName;
+		public string FileName => _fd.FileName;
 
-        public IEnumerable<string> FileNames => (_fd as CommonOpenFileDialog)?.FileNames ?? new string[] { FileName };
+		public IEnumerable<string> FileNames => (_fd as CommonOpenFileDialog)?.FileNames ?? new string[] { FileName };
 
-        private FileDialog(CommonFileDialog commonFileDialog, Window wndParent, Behavior behavior, Type type)
+        private FileDialog(CommonFileDialog commonFileDialog, Window wndParent, Behavior behavior)
         {
             _fd = commonFileDialog;
             WindowParent = wndParent;
             CurrentBehavior = behavior;
-            CurrentType = type;
         }
 
         public bool? ShowDialog()
@@ -80,68 +84,86 @@ namespace Xe.Tools.Wpf.Dialogs
 
         public static FileDialog Factory(Window wndParent, Behavior behavior, Type type = Type.Any, bool multipleSelection = false)
         {
-            CommonFileDialog fd;
-            switch (behavior)
-            {
-                case Behavior.Open:
-                    fd = new CommonOpenFileDialog()
-                    {
-                        EnsureFileExists = true,
-                        Multiselect = multipleSelection
-                    };
-                    break;
-                case Behavior.Save:
-                    fd = new CommonSaveFileDialog()
-                    {
-
-                    };
-                    break;
-                case Behavior.Folder:
-                    fd = new CommonOpenFileDialog()
-                    {
-                        IsFolderPicker = true,
-                        Multiselect = multipleSelection
-                    };
-                    break;
-                default:
-                    throw new ArgumentException("Invalid parameter", nameof(behavior));
-            }
-            fd.AddToMostRecentlyUsedList = true;
-            fd.EnsurePathExists = true;
+			var filters = new List<(string, string[])>();
 
             if (behavior != Behavior.Folder)
             {
                 switch (type)
                 {
                     case Type.Any:
-                        fd.Filters.Add(CreateFilter("All files",
-                            new string[] { "*" }));
+						filters.Add(("All files", new string[] { "*" }));
                         break;
                     case Type.Executable:
-                        fd.Filters.Add(CreateFilter("Application",
-                            new string[] { "exe" }));
+						filters.Add(("Application", new string[] { "exe" }));
                         break;
                     case Type.XeGameProject:
-                        fd.Filters.Add(CreateFilter("XeEngine project",
-                            new string[] { "proj.json" }));
+						filters.Add(("XeEngine project", new string[] { "proj.json" }));
                         break;
                     case Type.XeAnimation:
-                        fd.Filters.Add(CreateFilter("XeEngine project",
-                            new string[] { "anim.json" }));
+						filters.Add(("XeEngine 2D animation", new string[] { "anim.json" }));
                         break;
                     case Type.ImagePng:
-                        fd.Filters.Add(CreateFilter("PNG image file",
-                            new string[] { "png" }));
+						filters.Add(("PNG image", new string[] { "png" }));
                         break;
                     default:
                         break;
                 }
             }
 
-            return new FileDialog(fd, wndParent, behavior, type);
-        }
+            return Factory(wndParent, behavior, filters, multipleSelection);
+		}
 
-        private static CommonFileDialogFilter CreateFilter(string name, string[] filters)
+		public static FileDialog Factory(Window wndParent, Behavior behavior, (string, string) filter, bool multipleSelection = false)
+		{
+			return Factory(wndParent, behavior, new(string, string)[] { filter }, multipleSelection);
+		}
+
+		public static FileDialog Factory(Window wndParent, Behavior behavior, IEnumerable<(string, string)> filters, bool multipleSelection = false)
+		{
+			return Factory(wndParent, behavior, filters.Select(x => (x.Item1, new string[] { x.Item2 })), multipleSelection);
+		}
+
+		public static FileDialog Factory(Window wndParent, Behavior behavior, IEnumerable<(string, string[])> filters, bool multipleSelection = false)
+		{
+			CommonFileDialog fd;
+			switch (behavior)
+			{
+				case Behavior.Open:
+					fd = new CommonOpenFileDialog()
+					{
+						EnsureFileExists = true,
+						Multiselect = multipleSelection
+					};
+					break;
+				case Behavior.Save:
+					fd = new CommonSaveFileDialog()
+					{
+
+					};
+					break;
+				case Behavior.Folder:
+					fd = new CommonOpenFileDialog()
+					{
+						IsFolderPicker = true,
+						Multiselect = multipleSelection
+					};
+					break;
+				default:
+					throw new ArgumentException("Invalid parameter", nameof(behavior));
+			}
+			fd.AddToMostRecentlyUsedList = true;
+			fd.EnsurePathExists = true;
+
+			foreach (var filter in filters)
+			{
+				fd.Filters.Add(CreateFilter(filter.Item1, filter.Item2));
+			}
+
+			return new FileDialog(fd, wndParent, behavior);
+		}
+
+
+		private static CommonFileDialogFilter CreateFilter(string name, string[] filters)
         {
             var filter = new CommonFileDialogFilter()
             {
