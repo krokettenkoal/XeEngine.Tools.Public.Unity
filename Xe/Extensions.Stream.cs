@@ -25,26 +25,23 @@
 // Please do not redistribuite this code under your own name, stole it or use
 // it artfully, but instead support it and its author. Thank you.
 
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System;
+using System.IO;
 
-namespace Xe.Tools.Wpf
+namespace Xe
 {
-	public class BaseNotifyPropertyChanged : INotifyPropertyChanged
+	public static partial class Extensions
 	{
-		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		public static void CopyTo(this Stream source, Stream destination, int length, int bufferSize = 65536)
 		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
+			int read;
+			byte[] buffer = new byte[Math.Min(length, bufferSize)];
 
-		public void OnAllPropertiesChanged()
-		{
-			foreach (var property in GetType().GetProperties())
+			while ((read = source.Read(buffer, 0, Math.Min(length, bufferSize))) != 0)
 			{
-				OnPropertyChanged(property.Name);
+				destination.Write(buffer, 0, read);
+				length -= read;
 			}
 		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
 	}
 }

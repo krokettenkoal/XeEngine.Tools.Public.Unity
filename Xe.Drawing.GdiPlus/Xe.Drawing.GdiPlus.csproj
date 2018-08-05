@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{80ECBD59-D578-4694-9AD2-EA4A7BDC47FA}</ProjectGuid>
+    <ProjectGuid>{546AF9F7-FBB4-4B09-A090-CF0E1397CE62}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xe.Drawing</RootNamespace>
@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xe.Drawing\Xe.Drawing.csproj">
-      <Project>{17ce77b7-cae4-46f1-93b2-be1809856f4d}</Project>
+      <Project>{a06b8687-c55f-4c29-b53e-15e225be4cb4}</Project>
       <Name>Xe.Drawing</Name>
     </ProjectReference>
   </ItemGroup>

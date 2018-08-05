@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{545D863A-CD36-4C79-A07F-CF82B718FC3E}</ProjectGuid>
+    <ProjectGuid>{F6E4E1DF-ACC6-4DDE-912F-C6465CB3D393}</ProjectGuid>
     <OutputType>library</OutputType>
     <RootNamespace>Xe.Tools.Wpf</RootNamespace>
     <AssemblyName>Xe.Tools.Wpf</AssemblyName>
@@ -34,10 +34,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.WindowsAPICodePack.Core.1.1.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.WindowsAPICodePack.Core.1.1.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.WindowsAPICodePack.Shell.1.1.0\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.WindowsAPICodePack.Shell.1.1.0\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
     <Reference Include="netstandard" />
     <Reference Include="PresentationFramework.Aero2" />
@@ -143,7 +143,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseNotifyPropertyChanged.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\StackCommands.cs" />
     <Compile Include="Controls\DrawingControl.cs" />
@@ -211,8 +210,12 @@
       <Project>{fa2b3f00-c5a2-4f8c-a339-ca043c4cf3ac}</Project>
       <Name>Xe.Drawing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Xe.Tools\Xe.Tools.csproj">
+      <Project>{6949ec2f-846a-40e1-955f-f0d06b8ae4e8}</Project>
+      <Name>Xe.Tools</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Xe\Xe.csproj">
-      <Project>{1936ceba-b05f-4a04-bb47-299d8201ec63}</Project>
+      <Project>{c9cf8f2f-72f5-44cf-be30-a5466dad8415}</Project>
       <Name>Xe</Name>
     </ProjectReference>
   </ItemGroup>

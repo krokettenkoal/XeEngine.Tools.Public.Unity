@@ -25,14 +25,13 @@
 // Please do not redistribuite this code under your own name, stole it or use
 // it artfully, but instead support it and its author. Thank you.
 
-using System;
 using System.IO;
 using System.Text;
 
 namespace Xe
 {
-    public static class Extensions
-    {
+    public static partial class Extensions
+	{
 		/// <summary>
 		/// Read a string with the given encoding, until a null terminator is reached.
 		/// </summary>
@@ -59,50 +58,26 @@ namespace Xe
 			return encoding.GetString(data, 0, length);
 		}
 
-        public static int WriteStringData(this BinaryWriter writer, string str)
-        {
-            return WriteStringData(writer, str, Encoding.ASCII);
-        }
-        public static int WriteStringData(this BinaryWriter writer, string str, Encoding encoding)
-        {
-            var bytes = encoding.GetBytes(str ?? string.Empty);
-            byte len = (byte)Math.Min(bytes.Length, byte.MaxValue);
-            writer.Write(len);
-            writer.Write(bytes, 0, len);
-            return len;
-        }
-
-        public static int ToInt(this Guid guid)
-        {
-            return guid.GetHashCode();
-        }
-        public static bool IntCollide(this Guid guid, Guid guid2)
-        {
-            return guid.GetHashCode() == guid2.GetHashCode();
-        }
-
 		/// <summary>
-		/// Open a binary file from the given file name in read mode.
+		/// Read a string with the given encoding, until a null terminator is reached.
 		/// </summary>
-		/// <param name="fileName"></param>
+		/// <param name="reader"></param>
+		/// <param name="encoding"></param>
 		/// <returns></returns>
-		public static BinaryReader ReadBinaryFile(this string fileName)
+		public static string ReadCString(this BinaryReader reader, Encoding encoding = null)
 		{
-			if (!File.Exists(fileName))
-				return null;
-			return new BinaryReader(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
-		}
+			if (encoding == null)
+				encoding = Encoding.UTF8;
 
-		public static void CopyTo(this Stream source, Stream destination, int length, int bufferSize = 65536)
-		{
-			int read;
-			byte[] buffer = new byte[Math.Min(length, bufferSize)];
-
-			while ((read = source.Read(buffer, 0, Math.Min(length, bufferSize))) != 0)
+			var memStream = new MemoryStream(0x100);
+			while (true)
 			{
-				destination.Write(buffer, 0, read);
-				length -= read;
+				byte c = reader.ReadByte();
+				if (c == 0)
+					break;
+				memStream.WriteByte(c);
 			}
+			return encoding.GetString(memStream.GetBuffer(), 0, (int)memStream.Length);
 		}
 	}
 }

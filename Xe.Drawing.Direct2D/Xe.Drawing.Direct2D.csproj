@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{66349C96-4F83-4AF1-96F7-56716460AE6E}</ProjectGuid>
+    <ProjectGuid>{DDDBF1B8-3370-4D41-8054-E8DF7AE781C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xe.Drawing</RootNamespace>
@@ -36,16 +36,16 @@
   <ItemGroup>
     <Reference Include="netstandard" />
     <Reference Include="SharpDX, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.4.1.0\lib\net45\SharpDX.dll</HintPath>
+      <HintPath>..\..\packages\SharpDX.4.1.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct2D1, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.Direct2D1.4.1.0\lib\net45\SharpDX.Direct2D1.dll</HintPath>
+      <HintPath>..\..\packages\SharpDX.Direct2D1.4.1.0\lib\net45\SharpDX.Direct2D1.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D11, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.Direct3D11.4.1.0\lib\net45\SharpDX.Direct3D11.dll</HintPath>
+      <HintPath>..\..\packages\SharpDX.Direct3D11.4.1.0\lib\net45\SharpDX.Direct3D11.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.DXGI.4.1.0\lib\net45\SharpDX.DXGI.dll</HintPath>
+      <HintPath>..\..\packages\SharpDX.DXGI.4.1.0\lib\net45\SharpDX.DXGI.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
   </ItemGroup>
@@ -59,12 +59,16 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xe.Drawing\Xe.Drawing.csproj">
-      <Project>{17ce77b7-cae4-46f1-93b2-be1809856f4d}</Project>
+      <Project>{a06b8687-c55f-4c29-b53e-15e225be4cb4}</Project>
       <Name>Xe.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Xe.Tools.Services\Xe.Tools.Services.csproj">
-      <Project>{240b9f1c-1dba-4d73-8fc3-7f9eb39b57d5}</Project>
-      <Name>Xe.Tools.Services</Name>
+    <ProjectReference Include="..\Xe.Tools\Xe.Tools.csproj">
+      <Project>{6949EC2F-846A-40E1-955F-F0D06B8AE4E8}</Project>
+      <Name>Xe.Tools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xe\Xe.csproj">
+      <Project>{c9cf8f2f-72f5-44cf-be30-a5466dad8415}</Project>
+      <Name>Xe</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

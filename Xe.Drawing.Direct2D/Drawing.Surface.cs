@@ -43,8 +43,9 @@ namespace Xe.Drawing
     using SharpDX.Win32;
     using System;
     using System.Runtime.InteropServices;
+	using Xe.Tools.Utilities;
 
-    public partial class DrawingDirect2D
+	public partial class DrawingDirect2D
     {
         public class MappedResource : IMappedResource
         {
@@ -183,9 +184,9 @@ namespace Xe.Drawing
                                 var memSize = stride * bmpSize.Height;
                                 var ptr = Marshal.AllocHGlobal(memSize);
                                 bmpSource.CopyPixels(stride, ptr, memSize);
-                                Xe.Tools.Services.ImageService.MakeTransparent_Bgra32(ptr, stride, bmpSize.Height,
+                                Xe.Tools.Utilities.BitmapUtility.MakeTransparent_Bgra32(ptr, stride, bmpSize.Height,
                                     filterColors
-                                    .Select(x => new Xe.Tools.Services.Color()
+                                    .Select(x => new Xe.Graphics.Color()
                                     {
                                         a = x.A,
                                         r = x.R,

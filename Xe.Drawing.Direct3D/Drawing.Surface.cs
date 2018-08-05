@@ -85,9 +85,9 @@ namespace Xe.Drawing
                     bitmapSource.CopyPixels(stride, buffer);
                     if (filterColors.Length > 0)
                     {
-                        Xe.Tools.Services.ImageService.MakeTransparent_Bgra32(buffer.DataPointer, stride,
+						Xe.Tools.Utilities.BitmapUtility.MakeTransparent_Bgra32(buffer.DataPointer, stride,
                             bitmapSource.Size.Height, filterColors
-                            .Select(x => new Xe.Tools.Services.Color()
+                            .Select(x => new Xe.Graphics.Color()
                             {
                                 a = x.A,
                                 r = x.R,
