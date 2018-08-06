@@ -130,13 +130,13 @@ namespace Xe
 		public static double Max(double x, double y) => System.Math.Max(x, y);
 		public static decimal Max(decimal x, decimal y) => System.Math.Max(x, y);
 
-		public static sbyte Abs(sbyte x, sbyte y) => System.Math.Abs(x);
-		public static short Abs(short x, short y) => System.Math.Abs(x);
-		public static int Abs(int x, int y) => System.Math.Abs(x);
-		public static long Abs(long x, long y) => System.Math.Abs(x);
-		public static float Abs(float x, float y) => System.Math.Abs(x);
-		public static double Abs(double x, double y) => System.Math.Abs(x);
-		public static decimal Abs(decimal x, decimal y) => System.Math.Abs(x);
+		public static sbyte Abs(sbyte x) => System.Math.Abs(x);
+		public static short Abs(short x) => System.Math.Abs(x);
+		public static int Abs(int x) => System.Math.Abs(x);
+		public static long Abs(long x) => System.Math.Abs(x);
+		public static float Abs(float x) => System.Math.Abs(x);
+		public static double Abs(double x) => System.Math.Abs(x);
+		public static decimal Abs(decimal x) => System.Math.Abs(x);
 
 		public static sbyte Range(sbyte x, sbyte min, sbyte max) => x > min ? x < max ? x : max : min;
 		public static byte Range(byte x, byte min, byte max) => x > min ? x < max ? x : max : min;
