@@ -95,6 +95,17 @@ namespace Xe
 
     public static partial class Math
 	{
+		public static sbyte Lerp(sbyte x, sbyte y, double t) => (sbyte)(x + t * (y - x));
+		public static byte Lerp(byte x, byte y, double t) => (byte)(x + t * (y - x));
+		public static short Lerp(short x, short y, double t) => (short)(x + t * (y - x));
+		public static ushort Lerp(ushort x, ushort y, double t) => (ushort)(x + t * (y - x));
+		public static int Lerp(int x, int y, double t) => (int)(x + t * (y - x));
+		public static uint Lerp(uint x, uint y, double t) => (uint)(x + t * (y - x));
+		public static long Lerp(long x, long y, double t) => (long)(x + t * (y - x));
+		public static ulong Lerp(ulong x, ulong y, double t) => (ulong)(x + t * (y - x));
+		public static float Lerp(float x, float y, double t) => (float)(x + t * (y - x));
+		public static double Lerp(double x, double y, double t) => x + t * (y - x);
+
 		public static sbyte Min(sbyte x, sbyte y) => System.Math.Min(x, y);
 		public static byte Min(byte x, byte y) => System.Math.Min(x, y);
 		public static short Min(short x, short y) => System.Math.Min(x, y);

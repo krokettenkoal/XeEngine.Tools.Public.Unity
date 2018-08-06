@@ -179,7 +179,6 @@
     <Compile Include="Icons\Icons.xaml.cs">
       <DependentUpon>Icons.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\EnumModel.cs" />
     <Compile Include="Models\GenericListModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
