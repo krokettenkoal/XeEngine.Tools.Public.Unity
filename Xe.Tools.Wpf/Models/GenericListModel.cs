@@ -29,7 +29,7 @@ namespace Xe.Tools.Wpf.Models
 			{
 				var index = Items.IndexOf(SelectedItem);
 				this.list.RemoveAt(index);
-			}, x => x != null && x is T);
+			}, x => SelectedItem != null && SelectedItem is T);
 
 			MoveUpCommand = new RelayCommand(x =>
 			{
@@ -37,7 +37,7 @@ namespace Xe.Tools.Wpf.Models
 				Items.RemoveAt(selectedIndex);
 				Items.Insert(--selectedIndex, item);
 				SelectedIndex = selectedIndex;
-			}, x => x != null && x is T);
+			}, x => SelectedItem != null && SelectedItem is T);
 
 			MoveDownCommand = new RelayCommand(x =>
 			{
@@ -45,7 +45,7 @@ namespace Xe.Tools.Wpf.Models
 				Items.RemoveAt(selectedIndex);
 				Items.Insert(++selectedIndex, item);
 				SelectedIndex = selectedIndex;
-			}, x => x != null && x is T);
+			}, x => SelectedItem != null && SelectedItem is T);
 		}
 
 		public ObservableCollection<T> Items { get; private set; }
@@ -57,7 +57,6 @@ namespace Xe.Tools.Wpf.Models
 			{
 				selectedItem = value;
 				OnSelectedItem(value);
-
 				NotifyItemSelected();
 			}
 		}
@@ -68,7 +67,6 @@ namespace Xe.Tools.Wpf.Models
 			set
 			{
 				selectedIndex = value;
-
 				NotifyItemSelected();
 			}
 		}

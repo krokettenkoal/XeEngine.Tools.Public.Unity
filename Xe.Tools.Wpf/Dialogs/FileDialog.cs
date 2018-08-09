@@ -73,7 +73,9 @@ namespace Xe.Tools.Wpf.Dialogs
 
         public bool? ShowDialog()
         {
-            switch (_fd.ShowDialog(WindowParent))
+			var result = WindowParent != null ? _fd.ShowDialog(WindowParent) : _fd.ShowDialog();
+
+			switch (result)
             {
                 case CommonFileDialogResult.Ok: return true;
                 case CommonFileDialogResult.None: return false;
