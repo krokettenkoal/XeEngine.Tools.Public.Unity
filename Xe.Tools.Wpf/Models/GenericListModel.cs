@@ -99,6 +99,7 @@ namespace Xe.Tools.Wpf.Models
 		{
 			Items = selector != null ?
 				new ObservableCollection<T>(list.Where(selector)) : list;
+			OnPropertyChanged(nameof(Items));
 		}
 
 		protected abstract T OnNewItem();
