@@ -32,7 +32,7 @@ using System.Linq;
 
 namespace Xe.Tools.Models
 {
-	public class EnumItemModel<T>
+	public class EnumItemModel<T> : BaseNotifyPropertyChanged
 	{
 		public T Value { get; set; }
 
