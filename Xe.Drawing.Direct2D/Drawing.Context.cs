@@ -30,15 +30,10 @@ using static Xe.Drawing.Helpers;
 
 namespace Xe.Drawing
 {
-    using SharpDX;
-    using SharpDX.IO;
     // use namespaces shortcuts to reduce typing and avoid the messing the same class names from different namespaces
     using d2 = SharpDX.Direct2D1;
-    using d3d = SharpDX.Direct3D11;
     using dxgi = SharpDX.DXGI;
     using wic = SharpDX.WIC;
-    using dw = SharpDX.DirectWrite;
-    using System.Drawing.Imaging;
 
     public partial class DrawingDirect2D
     {

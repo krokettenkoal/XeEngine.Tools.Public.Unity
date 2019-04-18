@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>Xe.Drawing</RootNamespace>
-    <TargetFramework>net471</TargetFramework>
+    <TargetFrameworks>net452;net472</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Xe.Drawing\Xe.Drawing.csproj" />

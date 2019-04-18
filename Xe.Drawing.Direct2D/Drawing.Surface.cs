@@ -25,7 +25,6 @@
 // Please do not redistribuite this code under your own name, stole it or use
 // it artfully, but instead support it and its author. Thank you.
 
-using System.Drawing.Imaging;
 using System.Linq;
 using static Xe.Drawing.Helpers;
 
