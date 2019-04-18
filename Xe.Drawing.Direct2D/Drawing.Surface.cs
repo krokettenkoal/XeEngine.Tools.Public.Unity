@@ -244,7 +244,7 @@ namespace Xe.Drawing
                         {
                             var imageParameters = new wic.ImageParameters(bitmap.PixelFormat,
                                 dpi.Width, dpi.Height, 0, 0, pixelSize.Width, pixelSize.Height);
-                            imageEncoder.WriteFrame(bitmap, bitmapFrameEncode, ref imageParameters);
+                            imageEncoder.WriteFrame(bitmap, bitmapFrameEncode, imageParameters);
 
                             bitmapFrameEncode.Commit();
                             encoder.Commit();
