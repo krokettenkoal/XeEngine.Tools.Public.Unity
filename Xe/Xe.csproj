@@ -1,15 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Extensions.String.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="Extensions.String.cs" />
   </ItemGroup>
-
 </Project>

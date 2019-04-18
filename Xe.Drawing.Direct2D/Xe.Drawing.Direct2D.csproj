@@ -1,78 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DDDBF1B8-3370-4D41-8054-E8DF7AE781C0}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Xe.Drawing</RootNamespace>
-    <AssemblyName>Xe.Drawing.DirectX</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFramework>net471</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="netstandard" />
-    <Reference Include="SharpDX, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpDX.4.1.0\lib\net45\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct2D1, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpDX.Direct2D1.4.1.0\lib\net45\SharpDX.Direct2D1.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D11, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpDX.Direct3D11.4.1.0\lib\net45\SharpDX.Direct3D11.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpDX.DXGI.4.1.0\lib\net45\SharpDX.DXGI.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Drawing" />
+    <PackageReference Include="SharpDX" Version="4.1.0" />
+    <PackageReference Include="SharpDX.Direct2D1" Version="4.1.0" />
+    <PackageReference Include="SharpDX.Direct3D11" Version="4.1.0" />
+    <PackageReference Include="SharpDX.DXGI" Version="4.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Drawing.Context.cs" />
-    <Compile Include="Drawing.cs" />
-    <Compile Include="Drawing.Device.cs" />
-    <Compile Include="Drawing.Surface.cs" />
-    <Compile Include="Helpers.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <ProjectReference Include="..\Xe.Drawing\Xe.Drawing.csproj" />
+    <ProjectReference Include="..\Xe.Tools\Xe.Tools.csproj" />
+    <ProjectReference Include="..\Xe\Xe.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Xe.Drawing\Xe.Drawing.csproj">
-      <Project>{a06b8687-c55f-4c29-b53e-15e225be4cb4}</Project>
-      <Name>Xe.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xe.Tools\Xe.Tools.csproj">
-      <Project>{6949EC2F-846A-40E1-955F-F0D06B8AE4E8}</Project>
-      <Name>Xe.Tools</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xe\Xe.csproj">
-      <Project>{c9cf8f2f-72f5-44cf-be30-a5466dad8415}</Project>
-      <Name>Xe</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

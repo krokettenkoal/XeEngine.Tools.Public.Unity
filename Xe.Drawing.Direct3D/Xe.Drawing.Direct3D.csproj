@@ -1,82 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C2201D0E-586D-43C4-B430-C144B77C30B7}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Xe.Drawing.Direct3D</RootNamespace>
-    <AssemblyName>Xe.Drawing.Direct3D</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <RootNamespace>Xe.Drawing</RootNamespace>
+    <TargetFramework>net471</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Drawing.cs" />
-    <Compile Include="Drawing.Drawing.cs" />
-    <Compile Include="Drawing.Sharders.cs" />
-    <Compile Include="Drawing.Surface.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="SharpDX" Version="4.1.0" />
+    <PackageReference Include="SharpDX.D3DCompiler" Version="4.1.0" />
+    <PackageReference Include="SharpDX.Direct2D1" Version="4.1.0" />
+    <PackageReference Include="SharpDX.Direct3D11" Version="4.1.0" />
+    <PackageReference Include="SharpDX.DXGI" Version="4.1.0" />
+    <PackageReference Include="SharpDX.Mathematics" Version="4.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Xe.Drawing\Xe.Drawing.csproj">
-      <Project>{a06b8687-c55f-4c29-b53e-15e225be4cb4}</Project>
-      <Name>Xe.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xe.Tools\Xe.Tools.csproj">
-      <Project>{6949ec2f-846a-40e1-955f-f0d06b8ae4e8}</Project>
-      <Name>Xe.Tools</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xe\Xe.csproj">
-      <Project>{c9cf8f2f-72f5-44cf-be30-a5466dad8415}</Project>
-      <Name>Xe</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Xe.Drawing\Xe.Drawing.csproj" />
+    <ProjectReference Include="..\Xe.Tools\Xe.Tools.csproj" />
+    <ProjectReference Include="..\Xe\Xe.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="netstandard" />
-    <Reference Include="SharpDX, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpDX.4.1.0\lib\net45\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.D3DCompiler, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpDX.D3DCompiler.4.1.0\lib\net45\SharpDX.D3DCompiler.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct2D1, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpDX.Direct2D1.4.1.0\lib\net45\SharpDX.Direct2D1.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D11, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpDX.Direct3D11.4.1.0\lib\net45\SharpDX.Direct3D11.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpDX.DXGI.4.1.0\lib\net45\SharpDX.DXGI.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Mathematics, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SharpDX.Mathematics.4.1.0\lib\net45\SharpDX.Mathematics.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Drawing" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Drawing.Context.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
