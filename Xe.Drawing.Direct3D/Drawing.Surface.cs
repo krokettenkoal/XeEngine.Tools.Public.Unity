@@ -30,6 +30,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Xe.Drawing
 {
@@ -233,7 +234,12 @@ namespace Xe.Drawing
 			}
         }
 
-        public override ISurface CreateSurface(int width, int height, PixelFormat pixelFormat, SurfaceType type)
+        public override ISurface CreateSurface(
+            int width,
+            int height,
+            PixelFormat pixelFormat,
+            SurfaceType type,
+            DataResource dataResource = null)
         {
             var desc = new d3d.Texture2DDescription
             {
@@ -263,7 +269,15 @@ namespace Xe.Drawing
                     break;
             }
 
-            var texture = new d3d.Texture2D(Device, desc);
+            d3d.Texture2D texture;
+            if (dataResource != null)
+            {
+                var srcDataPtr = Marshal.UnsafeAddrOfPinnedArrayElement(dataResource.Data, 0);
+                var dataSource = new SharpDX.DataRectangle(srcDataPtr, dataResource.Stride);
+                texture = new d3d.Texture2D(Device, desc, new[] { dataSource });
+            }
+            else
+                texture = new d3d.Texture2D(Device, desc);
             var shaderResourceView = new d3d.ShaderResourceView(Device, texture);
             return new CSurface(texture, shaderResourceView);
         }
