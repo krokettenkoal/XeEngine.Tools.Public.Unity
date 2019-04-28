@@ -87,7 +87,10 @@ namespace Xe.Drawing
 			DrawSurface(surface, src, new RectangleF(dst.X, dst.Y, dst.Width, dst.Height), flip);
 		}
 
-		public abstract void DrawRectangle(RectangleF rect, Color color, float width = 1.0f);
+        public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color) =>
+            DrawSurface(surface, src, dst, color, color, color, color);
+
+        public abstract void DrawRectangle(RectangleF rect, Color color, float width = 1.0f);
 		public abstract void FillRectangle(RectangleF rect, Color color);
 		public abstract void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, Flip flip);
 		public abstract void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, float alpha, Flip flip = Flip.None);
@@ -95,6 +98,8 @@ namespace Xe.Drawing
         public virtual void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color,
             float centerX, float centerY, float centerZ, float scaleX, float scaleY, float scaleZ,
             float rotateX, float rotateY, float rotateZ, Flip flip = Flip.None)
+        { }
+        public virtual void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color0, ColorF color1, ColorF color2, ColorF color3)
         { }
     }
 }

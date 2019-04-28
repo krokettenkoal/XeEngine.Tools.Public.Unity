@@ -83,7 +83,49 @@ namespace Xe.Drawing
 			DrawSurfaceFunctions[(int)flip](this, surface, src, dst, color, flip);
 		}
 
-		private static void DrawSurfaceFlipNone(DrawingDirect3D drawing, ISurface surface, Rectangle src, RectangleF dst, ColorF color, Flip flip)
+        public override void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color0, ColorF color1, ColorF color2, ColorF color3)
+        {
+            SetTextureToDraw(surface);
+            var size = surface.Size;
+            var viewport = _viewportSize;
+            var index = RequestVertices(4);
+            var buffer = _dataBuffer;
+
+            buffer[index++] = new Vertex()
+            {
+                X = dst.Left / viewport.Width * +2.0f - 1.0f,
+                Y = dst.Top / viewport.Height * -2.0f + 1.0f,
+                U = (float)src.Left / size.Width,
+                V = (float)src.Top / size.Height,
+                Color = color0
+            };
+            buffer[index++] = new Vertex()
+            {
+                X = dst.Right / viewport.Width * +2.0f - 1.0f,
+                Y = dst.Top / viewport.Height * -2.0f + 1.0f,
+                U = (float)src.Right / size.Width,
+                V = (float)src.Top / size.Height,
+                Color = color1
+            };
+            buffer[index++] = new Vertex()
+            {
+                X = dst.Left / viewport.Width * +2.0f - 1.0f,
+                Y = dst.Bottom / viewport.Height * -2.0f + 1.0f,
+                U = (float)src.Left / size.Width,
+                V = (float)src.Bottom / size.Height,
+                Color = color2
+            };
+            buffer[index++] = new Vertex()
+            {
+                X = dst.Right / viewport.Width * +2.0f - 1.0f,
+                Y = dst.Bottom / viewport.Height * -2.0f + 1.0f,
+                U = (float)src.Right / size.Width,
+                V = (float)src.Bottom / size.Height,
+                Color = color3
+            };
+        }
+
+        private static void DrawSurfaceFlipNone(DrawingDirect3D drawing, ISurface surface, Rectangle src, RectangleF dst, ColorF color, Flip flip)
 		{
 			var size = surface.Size;
 			var viewport = drawing._viewportSize;
