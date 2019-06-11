@@ -32,14 +32,14 @@ using System.Drawing;
 
 namespace Xe.Drawing
 {
-    public partial class DrawingDirect2D : Drawing
+    public partial class DrawingDirect2D : IDrawing
     {
         private CSurface _surface;
         private bool _invalidated;
         private Filter _filter;
         private InterpolationMode _interpolationMode;
 
-        public override ISurface Surface
+        public ISurface Surface
         {
             get
             {
@@ -62,7 +62,7 @@ namespace Xe.Drawing
             }
         }
 
-        public override Filter Filter
+        public Filter Filter
         {
             get => _filter;
             set
@@ -83,12 +83,12 @@ namespace Xe.Drawing
             }
         }
 
-		public override void Flush()
+		public void Flush()
 		{
 			d2dContext.Flush();
 		}
 
-		public override void Clear(Color color)
+		public void Clear(Color color)
         {
             var r = color.R / 255.0f;
             var g = color.G / 255.0f;
@@ -98,7 +98,7 @@ namespace Xe.Drawing
             d2dContext.Clear(new RawColor4(r, g, b, a));
 		}
 
-		public override void DrawRectangle(RectangleF rect, Color color, float width)
+		public void DrawRectangle(RectangleF rect, Color color, float width)
 		{
 			using (var brush = new SolidColorBrush(d2dContext, ToRaw(color)))
 			{
@@ -106,7 +106,7 @@ namespace Xe.Drawing
 			}
 		}
 
-		public override void FillRectangle(RectangleF rect, Color color)
+		public void FillRectangle(RectangleF rect, Color color)
 		{
 			using (var brush = new SolidColorBrush(d2dContext, ToRaw(color)))
 			{
@@ -114,24 +114,24 @@ namespace Xe.Drawing
 			}
 		}
 
-		public override void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, Flip flip)
+		public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, Flip flip)
 		{
 			DrawSurface(surface, src, dst, 1.0f, flip);
 		}
 
-		public override void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, float alpha, Flip flip)
+		public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, float alpha, Flip flip)
 		{
             RawMatrix? matrix = flip != Flip.None ?
                 ToMatrix(dst, flip) : (RawMatrix?)null;
             DrawSurface(surface, src, dst, alpha, matrix);
 		}
 
-		public override void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color, Flip flip = Flip.None)
+		public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color, Flip flip = Flip.None)
 		{
 			DrawSurface(surface, src, dst, color.A, flip);
 		}
 
-        public override void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color,
+        public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color,
             float centerX, float centerY, float centerZ, float scaleX, float scaleY, float scaleZ,
             float rotateX, float rotateY, float rotateZ, Flip flip = Flip.None)
         {
@@ -183,7 +183,12 @@ namespace Xe.Drawing
             d2dContext.DrawBitmap(s.Bitmap, dstf, alpha, _interpolationMode, srcf, matrix);
         }
 
-        public override void Dispose()
+        public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color0, ColorF color1, ColorF color2, ColorF color3)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Dispose()
         {
             _surface?.Dispose();
             d2dContext?.Dispose();

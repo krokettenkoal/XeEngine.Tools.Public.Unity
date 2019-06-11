@@ -110,7 +110,7 @@ namespace Xe.Drawing
             }
         }
 
-        public override ISurface CreateSurface(string filename, Color[] filterColors)
+        public ISurface CreateSurface(string filename, Color[] filterColors)
         {
             var surface = new CSurface(filename);
             if (filterColors != null && filterColors.Length > 0)
@@ -129,6 +129,11 @@ namespace Xe.Drawing
         public ISurface CreateSurface(Bitmap bitmap)
         {
             return new CSurface(bitmap);
+        }
+
+        public ISurface CreateSurface(int width, int height, PixelFormat pixelFormat, SurfaceType type = SurfaceType.Input, DataResource dataResource = null)
+        {
+            throw new NotImplementedException();
         }
     }
 }

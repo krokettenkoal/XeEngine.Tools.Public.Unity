@@ -35,7 +35,7 @@ namespace Xe.Drawing
     using System;
     using System.Security;
 
-	public partial class DrawingDirect3D : Drawing
+	public partial class DrawingDirect3D : IDrawing
 	{
 		[DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl, SetLastError = false), SuppressUnmanagedCodeSecurity]
 		public static extern IntPtr CopyMemory(IntPtr dest, IntPtr src, ulong count);
@@ -59,31 +59,33 @@ namespace Xe.Drawing
 		};
 
 
-		public override void DrawRectangle(RectangleF rect, Color color, float width = 1)
-		{
-		}
+        public void DrawRectangle(RectangleF rect, Color color, float width = 1)
+        {
+            throw new System.NotImplementedException();
+        }
 
-		public override void FillRectangle(RectangleF rect, Color color)
-		{
-		}
+        public void FillRectangle(RectangleF rect, Color color)
+        {
+            throw new System.NotImplementedException();
+        }
 
-		public override void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, Flip flip)
+        public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, Flip flip)
 		{
 			DrawSurface(surface, src, dst, new ColorF(1.0f, 1.0f, 1.0f, 1.0f), flip);
 		}
 
-		public override void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, float alpha, Flip flip)
+		public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, float alpha, Flip flip)
 		{
 			DrawSurface(surface, src, dst, new ColorF(1.0f, 1.0f, 1.0f, alpha), flip);
 		}
 
-		public override void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color, Flip flip)
+		public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color, Flip flip)
 		{
 			SetTextureToDraw(surface);
 			DrawSurfaceFunctions[(int)flip](this, surface, src, dst, color, flip);
 		}
 
-        public override void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color0, ColorF color1, ColorF color2, ColorF color3)
+        public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color0, ColorF color1, ColorF color2, ColorF color3)
         {
             SetTextureToDraw(surface);
             var size = surface.Size;
@@ -317,7 +319,7 @@ namespace Xe.Drawing
 			return index;
 		}
 		
-        public override void Flush()
+        public void Flush()
         {
             if (_pendingVerticesCount == 0)
                 return;
@@ -370,6 +372,12 @@ namespace Xe.Drawing
             Context.DrawIndexed(_pendingVerticesCount / 4 * 6, 0, 0);
             Context.Flush();
             _pendingVerticesCount = 0;
+        }
+
+
+        public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color, float centerX, float centerY, float centerZ, float scaleX, float scaleY, float scaleZ, float rotateX, float rotateY, float rotateZ, Flip flip = Flip.None)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

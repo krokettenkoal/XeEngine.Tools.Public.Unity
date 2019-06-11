@@ -39,67 +39,42 @@ namespace Xe.Drawing
         InputOutput
     }
 
-    public abstract class Drawing : IDrawing
+    public static class DrawingExtensions
     {
-        public abstract ISurface Surface { get; set; }
-        public abstract Filter Filter { get; set; }
-
-		public abstract void Flush();
-        public abstract void Clear(Color color);
-        public abstract ISurface CreateSurface(int width, int height, PixelFormat pixelFormat, SurfaceType type, DataResource dataResource = null);
-        public abstract ISurface CreateSurface(string filename, Color[] filterColors = null);
-        public abstract void Dispose();
-        
-        public void DrawSurface(ISurface surface, int x, int y, Flip flip)
+        public static void DrawSurface(this IDrawing drawing, ISurface surface, int x, int y, Flip flip = Flip.None)
         {
             var src = new Rectangle(0, 0, surface.Width, surface.Height);
             var dst = new Rectangle(x, y, src.Width, src.Height);
-            DrawSurface(surface, src, dst, flip);
+            drawing.DrawSurface(surface, src, dst, flip);
         }
 
-        public void DrawSurface(ISurface surface, int x, int y, int width, int height, Flip flip)
+        public static void DrawSurface(this IDrawing drawing, ISurface surface, int x, int y, int width, int height, Flip flip = Flip.None)
         {
             var src = new Rectangle(0, 0, surface.Width, surface.Height);
             var dst = new Rectangle(x, y, width, height);
-            DrawSurface(surface, src, dst, flip);
+            drawing.DrawSurface(surface, src, dst, flip);
         }
 
-        public void DrawSurface(ISurface surface, Rectangle dst, Flip flip)
-        {
-            var src = new Rectangle(0, 0, surface.Width, surface.Height);
-            DrawSurface(surface, src, dst, flip);
-        }
+        public static void DrawSurface(this IDrawing drawing, ISurface surface, Rectangle dst, Flip flip = Flip.None) =>
+            drawing.DrawSurface(surface, new Rectangle(0, 0, surface.Width, surface.Height), dst, flip);
 
-        public void DrawSurface(ISurface surface, Rectangle src, int x, int y, Flip flip)
-        {
-            var dst = new Rectangle(x, y, src.Width, src.Height);
-            DrawSurface(surface, src, dst, flip);
-        }
+        public static void DrawSurface(this IDrawing drawing, ISurface surface, Rectangle src, int x, int y, Flip flip = Flip.None) =>
+            drawing.DrawSurface(surface, src, new Rectangle(x, y, src.Width, src.Height), flip);
 
-        public void DrawSurface(ISurface surface, Rectangle src, int x, int y, int width, int height, Flip flip)
-        {
-            var dst = new Rectangle(x, y, width, height);
-            DrawSurface(surface, src, dst, flip);
-		}
+        public static void DrawSurface(this IDrawing drawing, ISurface surface, Rectangle src, int x, int y, int width, int height, Flip flip = Flip.None) =>
+            drawing.DrawSurface(surface, src, new Rectangle(x, y, width, height), flip);
 
-		public void DrawSurface(ISurface surface, Rectangle src, Rectangle dst, Flip flip)
-		{
-			DrawSurface(surface, src, new RectangleF(dst.X, dst.Y, dst.Width, dst.Height), flip);
-		}
+        public static void DrawSurface(this IDrawing drawing, ISurface surface, Rectangle src, Rectangle dst, Flip flip = Flip.None) =>
+            drawing.DrawSurface(surface, src, new RectangleF(dst.X, dst.Y, dst.Width, dst.Height), flip);
 
-        public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color) =>
-            DrawSurface(surface, src, dst, color, color, color, color);
+        public static void DrawSurface(this IDrawing drawing, ISurface surface, Rectangle src, RectangleF dst, ColorF color) =>
+            drawing.DrawSurface(surface, src, dst, color, color, color, color);
 
-        public abstract void DrawRectangle(RectangleF rect, Color color, float width = 1.0f);
-		public abstract void FillRectangle(RectangleF rect, Color color);
-		public abstract void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, Flip flip);
-		public abstract void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, float alpha, Flip flip = Flip.None);
-		public abstract void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color, Flip flip = Flip.None);
-        public virtual void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color,
+        public static void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color,
             float centerX, float centerY, float centerZ, float scaleX, float scaleY, float scaleZ,
             float rotateX, float rotateY, float rotateZ, Flip flip = Flip.None)
-        { }
-        public virtual void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color0, ColorF color1, ColorF color2, ColorF color3)
-        { }
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

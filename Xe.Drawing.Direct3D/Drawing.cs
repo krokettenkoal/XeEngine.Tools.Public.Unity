@@ -33,14 +33,14 @@ namespace Xe.Drawing
     using d3d = SharpDX.Direct3D11;
     using dxgi = SharpDX.DXGI;
 
-    public partial class DrawingDirect3D : Drawing
+    public partial class DrawingDirect3D : IDrawing
     {
         private Filter _filter = Filter.Nearest;
         private d3d.RenderTargetView _renderTarget;
         private CSurface _dstSurface;
         private SizeF _viewportSize;
 
-        public override ISurface Surface
+        public ISurface Surface
         {
             get => _dstSurface;
             set
@@ -64,13 +64,13 @@ namespace Xe.Drawing
                 }
             }
         }
-        public override Filter Filter
+        public Filter Filter
         {
             get => _filter;
             set => _filter = value;
         }
 
-        public override void Clear(Color color)
+        public void Clear(Color color)
         {
             if (_renderTarget != null)
             {
@@ -84,7 +84,7 @@ namespace Xe.Drawing
             }
         }
 
-        public override void Dispose()
+        public void Dispose()
         {
             _renderTarget?.Dispose();
             _device.Dispose();

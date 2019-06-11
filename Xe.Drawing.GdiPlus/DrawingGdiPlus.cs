@@ -32,14 +32,14 @@ using System.Drawing.Imaging;
 
 namespace Xe.Drawing
 {
-    public partial class DrawingGdiPlus : Drawing
+    public partial class DrawingGdiPlus : IDrawing
     {
         private Graphics _graphics;
         private bool _invalidated;
         private CSurface _surface;
         private Filter _filter;
 
-        public override ISurface Surface
+        public ISurface Surface
         {
             get
             {
@@ -70,7 +70,7 @@ namespace Xe.Drawing
             }
         }
 
-        public override Filter Filter
+        public Filter Filter
         {
             get => _filter;
             set
@@ -96,7 +96,7 @@ namespace Xe.Drawing
             }
         }
 
-        public override ISurface CreateSurface(int width, int height, PixelFormat pixelFormat, SurfaceType type)
+        public ISurface CreateSurface(int width, int height, PixelFormat pixelFormat, SurfaceType type)
         {
             using (var bitmap = new Bitmap(width, height, GetPixelFormat(pixelFormat)))
             {
@@ -107,17 +107,17 @@ namespace Xe.Drawing
             }
         }
 
-		public override void Flush()
+		public void Flush()
 		{
 			_graphics.Flush();
 		}
 
-		public override void Clear(Color color)
+		public void Clear(Color color)
         {
             _graphics.Clear(color);
 		}
 
-		public override void DrawRectangle(RectangleF rect, Color color, float width = 1.0f)
+		public void DrawRectangle(RectangleF rect, Color color, float width = 1.0f)
 		{
 			using (var brush = new SolidBrush(color))
 			{
@@ -128,7 +128,7 @@ namespace Xe.Drawing
 			}
 		}
 
-		public override void FillRectangle(RectangleF rect, Color color)
+		public void FillRectangle(RectangleF rect, Color color)
 		{
 			using (var brush = new SolidBrush(color))
 			{
@@ -136,7 +136,7 @@ namespace Xe.Drawing
 			}
 		}
 
-		public override void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, Flip flip)
+		public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, Flip flip)
         {
             var mySurface = surface as CSurface;
             if (mySurface == null)
@@ -172,17 +172,22 @@ namespace Xe.Drawing
             Invalidate();
 		}
 
-		public override void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, float alpha, Flip flip = Flip.None)
+		public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, float alpha, Flip flip = Flip.None)
 		{
 			DrawSurface(surface, src, dst, flip);
 		}
 
-		public override void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color, Flip flip = Flip.None)
+		public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color, Flip flip = Flip.None)
 		{
 			DrawSurface(surface, src, dst, flip);
-		}
+        }
 
-		public override void Dispose()
+        public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, ColorF color0, ColorF color1, ColorF color2, ColorF color3)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
         {
             _surface.Dispose();
             _graphics.Dispose();

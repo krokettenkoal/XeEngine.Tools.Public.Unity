@@ -121,7 +121,7 @@ namespace Xe.Drawing
             }
         }
 
-        public override ISurface CreateSurface(int width, int height, PixelFormat pixelFormat, SurfaceType type)
+        public ISurface CreateSurface(int width, int height, PixelFormat pixelFormat, SurfaceType type)
         {
             d2.BitmapOptions options;
             switch (type)
@@ -142,7 +142,12 @@ namespace Xe.Drawing
             return CreateSurface(width, height, options);
         }
 
-        public override ISurface CreateSurface(string filename, System.Drawing.Color[] filterColors)
+        public ISurface CreateSurface(int width, int height, PixelFormat pixelFormat, SurfaceType type = SurfaceType.Input, DataResource dataResource = null)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ISurface CreateSurface(string filename, System.Drawing.Color[] filterColors)
         {
             var imagingFactory = device.ImagingFactory;
 

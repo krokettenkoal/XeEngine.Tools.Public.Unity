@@ -234,7 +234,7 @@ namespace Xe.Drawing
 			}
         }
 
-        public override ISurface CreateSurface(
+        public ISurface CreateSurface(
             int width,
             int height,
             PixelFormat pixelFormat,
@@ -282,7 +282,7 @@ namespace Xe.Drawing
             return new CSurface(texture, shaderResourceView);
         }
 
-        public override ISurface CreateSurface(string filename, Color[] filterColors = null)
+        public ISurface CreateSurface(string filename, Color[] filterColors = null)
         {
             var bitmap = TextureLoader.LoadBitmap(new wic.ImagingFactory2(), filename);
             var texture = TextureLoader.CreateTexture2DFromBitmap(Device, bitmap, filterColors);
