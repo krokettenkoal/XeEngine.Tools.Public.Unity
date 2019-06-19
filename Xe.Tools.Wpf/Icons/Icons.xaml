@@ -33,6 +33,7 @@
         <Image Source="{StaticResource Property_16x}" Width="16"/>
         <Image Source="{StaticResource Question_16x}" Width="16"/>
         <Image Source="{StaticResource Remove_color_16x}" Width="16"/>
+        <Image Source="{StaticResource Restart_16x}" Width="16"/>
         <Image Source="{StaticResource Run_16x}" Width="16"/>
         <Image Source="{StaticResource Search_16x}" Width="16"/>
         <Image Source="{StaticResource Settings_16x}" Width="16"/>
