@@ -86,6 +86,7 @@ namespace Xe.Drawing
 
         public void Dispose()
         {
+            _dummyTexture?.Dispose();
             _renderTarget?.Dispose();
             _device.Dispose();
         }

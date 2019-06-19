@@ -34,8 +34,9 @@ namespace Xe.Drawing
     using System.Runtime.InteropServices;
     using System;
     using System.Security;
+    using System.Linq;
 
-	public partial class DrawingDirect3D : IDrawing
+    public partial class DrawingDirect3D : IDrawing
 	{
 		[DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl, SetLastError = false), SuppressUnmanagedCodeSecurity]
 		public static extern IntPtr CopyMemory(IntPtr dest, IntPtr src, ulong count);
@@ -58,16 +59,19 @@ namespace Xe.Drawing
 			DrawSurfaceFlipXY
 		};
 
+        private ISurface _dummyTexture;
+        private ISurface DummyTexture => _dummyTexture = _dummyTexture ?? CreateDummyTexture();
 
         public void DrawRectangle(RectangleF rect, Color color, float width = 1)
         {
-            throw new System.NotImplementedException();
+            FillRectangle(new RectangleF(rect.X, rect.Y, rect.Width, width), color);
+            FillRectangle(new RectangleF(rect.X, rect.Y + rect.Height - 1, rect.Width + width - 1, width), color);
+            FillRectangle(new RectangleF(rect.X, rect.Y, width, rect.Height), color);
+            FillRectangle(new RectangleF(rect.X + rect.Width - 1, rect.Y, width, rect.Height), color);
         }
 
-        public void FillRectangle(RectangleF rect, Color color)
-        {
-            throw new System.NotImplementedException();
-        }
+        public void FillRectangle(RectangleF rect, Color color) =>
+            DrawSurface(DummyTexture, new Rectangle(0, 0, 2, 2), rect, ToColorF(color), Flip.None);
 
         public void DrawSurface(ISurface surface, Rectangle src, RectangleF dst, Flip flip)
 		{
@@ -379,5 +383,22 @@ namespace Xe.Drawing
         {
             throw new System.NotImplementedException();
         }
+
+        private ISurface CreateDummyTexture()
+        {
+            const int width = 2;
+            const int height = 2;
+            const int bpp = 32 / 8;
+
+            return CreateSurface(2, 2, PixelFormat.Format32bppArgb, SurfaceType.Input, new DataResource
+            {
+                Data = Enumerable.Range(0, width * height * bpp).Select(x => byte.MaxValue).ToArray(),
+                Length = width * height * bpp,
+                Stride = width * bpp
+            });
+        }
+
+        private ColorF ToColorF(Color color) =>
+            new ColorF(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
     }
 }
