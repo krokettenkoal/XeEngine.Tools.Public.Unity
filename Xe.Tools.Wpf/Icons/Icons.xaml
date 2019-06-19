@@ -19,6 +19,7 @@
         <Image Source="{StaticResource ClearWindowContent_16x}" Width="16"/>
         <Image Source="{StaticResource Copy_16x}" Width="16"/>
         <Image Source="{StaticResource Document_16x}" Width="16"/>
+        <Image Source="{StaticResource DynamicImage_16x}" Width="16"/>
         <Image Source="{StaticResource EditTitleString_16x}" Width="16"/>
         <Image Source="{StaticResource ExpandChevronRightGroup_16x}" Width="16"/>
         <Image Source="{StaticResource Export_16x}" Width="16"/>
