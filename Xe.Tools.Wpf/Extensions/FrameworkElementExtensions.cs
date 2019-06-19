@@ -19,7 +19,7 @@ namespace Xe.Tools.Wpf.Extensions
             if (frameworkElement is T myFrameworkElement && filter(myFrameworkElement))
                 return myFrameworkElement;
 
-            if (!(frameworkElement.Parent is FrameworkElement parent))
+            if (!(VisualTreeHelper.GetParent(frameworkElement) is FrameworkElement parent))
                 return null;
 
             return GetParent(parent, filter);
