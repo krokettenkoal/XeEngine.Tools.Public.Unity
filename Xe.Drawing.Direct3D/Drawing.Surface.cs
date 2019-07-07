@@ -241,6 +241,11 @@ namespace Xe.Drawing
             SurfaceType type,
             DataResource dataResource = null)
         {
+            if (width <= 0 || width > 65536)
+                throw new ArgumentOutOfRangeException(nameof(width), "Must be between 1 and 65536");
+            if (height <= 0 || height > 65536)
+                throw new ArgumentOutOfRangeException(nameof(height), "Must be between 1 and 65536");
+
             var desc = new d3d.Texture2DDescription
             {
                 Width = width,
