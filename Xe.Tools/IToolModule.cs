@@ -27,8 +27,13 @@
 
 namespace Xe.Tools
 {
+    public interface IToolModule<T> : IModule
+    {
+        bool? ShowDialog(T args);
+    }
+
     public interface IToolModule : IModule
     {
-		bool? ShowDialog(params object[] args);
+        bool? ShowDialog(params object[] args);
     }
 }
