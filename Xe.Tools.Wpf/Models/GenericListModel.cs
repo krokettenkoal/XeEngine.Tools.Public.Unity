@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,7 +7,7 @@ using Xe.Tools.Wpf.Commands;
 
 namespace Xe.Tools.Wpf.Models
 {
-	public abstract class GenericListModel<T> : BaseNotifyPropertyChanged
+	public abstract class GenericListModel<T> : BaseNotifyPropertyChanged, IEnumerable, IEnumerable<T>
 	{
 		private T selectedItem;
 		private int selectedIndex;
@@ -93,9 +94,12 @@ namespace Xe.Tools.Wpf.Models
 			OnPropertyChanged(nameof(RemoveCommand));
 			OnPropertyChanged(nameof(MoveUpCommand));
 			OnPropertyChanged(nameof(MoveDownCommand));
-		}
+        }
 
-		public void Filter(Func<T, bool> selector = null)
+        public IEnumerator GetEnumerator() => Items.GetEnumerator();
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() => Items.GetEnumerator();
+
+        public void Filter(Func<T, bool> selector = null)
 		{
 			Items = selector != null ?
 				new ObservableCollection<T>(list.Where(selector)) : list;
@@ -108,5 +112,5 @@ namespace Xe.Tools.Wpf.Models
 		{
 
 		}
-	}
+    }
 }
