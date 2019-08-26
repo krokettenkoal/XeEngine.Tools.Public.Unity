@@ -7,7 +7,7 @@ using Xe.Tools.Wpf.Commands;
 
 namespace Xe.Tools.Wpf.Models
 {
-	public abstract class GenericListModel<T> : BaseNotifyPropertyChanged, IEnumerable, IEnumerable<T>
+	public class GenericListModel<T> : BaseNotifyPropertyChanged, IEnumerable, IEnumerable<T>
 	{
 		private T selectedItem;
 		private int selectedIndex;
@@ -106,7 +106,7 @@ namespace Xe.Tools.Wpf.Models
 			OnPropertyChanged(nameof(Items));
 		}
 
-		protected abstract T OnNewItem();
+        protected virtual T OnNewItem() => throw new NotImplementedException();
 
 		protected virtual void OnSelectedItem(T item)
 		{
