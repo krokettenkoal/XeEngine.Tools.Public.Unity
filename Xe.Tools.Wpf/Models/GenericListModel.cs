@@ -21,7 +21,6 @@ namespace Xe.Tools.Wpf.Models
 
 			AddCommand = new RelayCommand(x =>
 			{
-				var item = OnNewItem();
 				this.list.Add(OnNewItem());
 				OnPropertyChanged(nameof(Items));
 			}, x => this.list != null);
