@@ -49,6 +49,7 @@ namespace Xe.Tools.Wpf.Models
 		}
 
 		public ObservableCollection<T> Items { get; private set; }
+        public ObservableCollection<T> UnfilteredItems => list;
 
 		public T SelectedItem
 		{
