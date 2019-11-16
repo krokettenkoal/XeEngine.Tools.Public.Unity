@@ -33,12 +33,50 @@ using System.Windows;
 
 namespace Xe.Tools.Wpf.Dialogs
 {
+    public class FileDialogFilter
+    {
+        public string Name { get; }
+        public string[] Extensions { get; }
+
+        private FileDialogFilter(string name, IEnumerable<string> extensions)
+        {
+            Name = name;
+            Extensions = extensions.ToArray();
+        }
+
+        public static FileDialogFilter ByAllFiles() => ByExtensions("All files", "*;*");
+        public static FileDialogFilter ByExtensions(string name, params string[] extensions) => ByExtensions(name, extensions.AsEnumerable());
+        public static FileDialogFilter ByExtensions(string name, IEnumerable<string> extensions) => new FileDialogFilter(name, extensions);
+    }
+
+    public static class FileDialogFilterComposer
+    {
+        public static List<FileDialogFilter> Compose() => new List<FileDialogFilter>();
+        public static List<FileDialogFilter> AddAllFiles(this List<FileDialogFilter> filters)
+        {
+            filters.Add(FileDialogFilter.ByAllFiles());
+            return filters;
+        }
+        public static List<FileDialogFilter> AddExtensions(this List<FileDialogFilter> filters, string name, params string[] extensions)
+        {
+            filters.Add(FileDialogFilter.ByExtensions(name, extensions));
+            return filters;
+        }
+        public static List<FileDialogFilter> AddExtensions(this List<FileDialogFilter> filters, string name, IEnumerable<string> extensions)
+        {
+            filters.Add(FileDialogFilter.ByExtensions(name, extensions));
+            return filters;
+        }
+    }
+
     public class FileDialog
     {
         public enum Behavior
         {
             Open, Save, Folder
         }
+
+        [Obsolete]
         public enum Type
         {
             Any,
@@ -52,17 +90,18 @@ namespace Xe.Tools.Wpf.Dialogs
 
         private Window WindowParent { get; }
 
+        [Obsolete]
         public Behavior CurrentBehavior { get; }
 
-		public string DefaultFileName
+        public string DefaultFileName
 		{
 			get => _fd.DefaultFileName;
 			set => _fd.DefaultFileName = value;
 		}
 
-		public string FileName => _fd.FileName;
+        public string FileName => _fd.FileName;
 
-		public IEnumerable<string> FileNames => (_fd as CommonOpenFileDialog)?.FileNames ?? new string[] { FileName };
+        public IEnumerable<string> FileNames => (_fd as CommonOpenFileDialog)?.FileNames ?? new string[] { FileName };
 
         private FileDialog(CommonFileDialog commonFileDialog, Window wndParent, Behavior behavior)
         {
@@ -71,11 +110,14 @@ namespace Xe.Tools.Wpf.Dialogs
             CurrentBehavior = behavior;
         }
 
-        public bool? ShowDialog()
-        {
-			var result = WindowParent != null ? _fd.ShowDialog(WindowParent) : _fd.ShowDialog();
+        [Obsolete]
+        public bool? ShowDialog() => InternalShowDialog();
 
-			switch (result)
+        private bool? InternalShowDialog()
+        {
+            var result = WindowParent != null ? _fd.ShowDialog(WindowParent) : _fd.ShowDialog();
+
+            switch (result)
             {
                 case CommonFileDialogResult.Ok: return true;
                 case CommonFileDialogResult.None: return false;
@@ -84,6 +126,7 @@ namespace Xe.Tools.Wpf.Dialogs
             }
         }
 
+        [Obsolete]
         public static FileDialog Factory(Window wndParent, Behavior behavior, Type type = Type.Any, bool multipleSelection = false)
         {
 			var filters = new List<(string, string[])>();
@@ -115,12 +158,14 @@ namespace Xe.Tools.Wpf.Dialogs
             return Factory(wndParent, behavior, filters, multipleSelection);
 		}
 
-		public static FileDialog Factory(Window wndParent, Behavior behavior, (string, string) filter, bool multipleSelection = false)
+        [Obsolete]
+        public static FileDialog Factory(Window wndParent, Behavior behavior, (string, string) filter, bool multipleSelection = false)
 		{
 			return Factory(wndParent, behavior, new(string, string)[] { filter }, multipleSelection);
 		}
 
-		public static FileDialog Factory(Window wndParent, Behavior behavior, IEnumerable<(string, string)> filters, bool multipleSelection = false)
+        [Obsolete]
+        public static FileDialog Factory(Window wndParent, Behavior behavior, IEnumerable<(string, string)> filters, bool multipleSelection = false)
 		{
 			return Factory(wndParent, behavior, filters.Select(x => (x.Item1, new string[] { x.Item2 })), multipleSelection);
 		}
@@ -164,8 +209,74 @@ namespace Xe.Tools.Wpf.Dialogs
 			return new FileDialog(fd, wndParent, behavior);
 		}
 
+        public static bool? OnOpen(
+            Action<string> callback,
+            IEnumerable<FileDialogFilter> filters = null,
+            string defaultFileName = null,
+            Window parent = null)
+        {
+            var fileDialog = FileDialog.Factory(parent, FileDialog.Behavior.Open, Map(filters));
+            fileDialog.DefaultFileName = defaultFileName;
 
-		private static CommonFileDialogFilter CreateFilter(string name, string[] filters)
+            var result = fileDialog.InternalShowDialog();
+            if (result == true)
+                callback(fileDialog.FileName);
+
+            return result;
+        }
+
+        public static bool? OnOpenMultiple(
+            Action<string[]> callback,
+            IEnumerable<FileDialogFilter> filters = null,
+            string defaultFileName = null,
+            Window parent = null)
+        {
+            var fileDialog = Factory(parent, FileDialog.Behavior.Open, Map(filters), true);
+            fileDialog.DefaultFileName = defaultFileName;
+
+            var result = fileDialog.InternalShowDialog();
+            if (result == true)
+                callback(fileDialog.FileNames.ToArray());
+
+            return result;
+        }
+
+        public static bool? OnSave(
+            Action<string> callback,
+            IEnumerable<FileDialogFilter> filters = null,
+            string defaultFileName = null,
+            System.Windows.Window parent = null)
+        {
+            var fileDialog = FileDialog.Factory(parent, FileDialog.Behavior.Save, Map(filters));
+            fileDialog.DefaultFileName = defaultFileName;
+
+            var result = fileDialog.InternalShowDialog();
+            if (result == true)
+                callback(fileDialog.FileName);
+
+            return result;
+        }
+
+        public static bool? OnFolder(
+            Action<string> callback,
+            IEnumerable<FileDialogFilter> filters = null,
+            string defaultFileName = null,
+            System.Windows.Window parent = null)
+        {
+            var fileDialog = Factory(parent, Behavior.Folder, Map(filters));
+            fileDialog.DefaultFileName = defaultFileName;
+
+            var result = fileDialog.InternalShowDialog();
+            if (result == true)
+                callback(fileDialog.FileName);
+
+            return result;
+        }
+
+        private static IEnumerable<(string, string[])> Map(IEnumerable<FileDialogFilter> filters) =>
+            filters.Select(filter => (filter.Name, filter.Extensions.ToArray()));
+
+        private static CommonFileDialogFilter CreateFilter(string name, string[] filters)
         {
             var filter = new CommonFileDialogFilter()
             {
