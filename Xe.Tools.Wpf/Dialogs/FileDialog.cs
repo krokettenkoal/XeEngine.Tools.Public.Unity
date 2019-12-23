@@ -46,7 +46,7 @@ namespace Xe.Tools.Wpf.Dialogs
 
         public override string ToString() => $"{Name}|{string.Join(";", Patterns)}";
 
-        public static FileDialogFilter ByAllFiles() => ByPatterns("All files", "*");
+        public static FileDialogFilter ByAllFiles(string name = "All files") => ByPatterns(name, "*");
         public static FileDialogFilter ByExtensions(string name, params string[] extensions) => ByExtensions(name, extensions.AsEnumerable());
         public static FileDialogFilter ByExtensions(string name, IEnumerable<string> extensions) =>
             ByPatterns(name, extensions.Select(x => $"*.{x}"));
@@ -57,9 +57,9 @@ namespace Xe.Tools.Wpf.Dialogs
     public static class FileDialogFilterComposer
     {
         public static List<FileDialogFilter> Compose() => new List<FileDialogFilter>();
-        public static List<FileDialogFilter> AddAllFiles(this List<FileDialogFilter> filters)
+        public static List<FileDialogFilter> AddAllFiles(this List<FileDialogFilter> filters, string name = "All files")
         {
-            filters.Add(FileDialogFilter.ByAllFiles());
+            filters.Add(FileDialogFilter.ByAllFiles(name));
             return filters;
         }
         public static List<FileDialogFilter> AddExtensions(this List<FileDialogFilter> filters, string name, params string[] extensions)
