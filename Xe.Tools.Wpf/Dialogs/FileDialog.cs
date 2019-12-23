@@ -25,28 +25,33 @@
 // Please do not redistribuite this code under your own name, stole it or use
 // it artfully, but instead support it and its author. Thank you.
 
-using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace Xe.Tools.Wpf.Dialogs
 {
     public class FileDialogFilter
     {
         public string Name { get; }
-        public string[] Extensions { get; }
+        public string[] Patterns { get; }
 
         private FileDialogFilter(string name, IEnumerable<string> extensions)
         {
             Name = name;
-            Extensions = extensions.ToArray();
+            Patterns = extensions.ToArray();
         }
 
-        public static FileDialogFilter ByAllFiles() => ByExtensions("All files", "*;*");
+        public override string ToString() => $"{Name}|{string.Join(";", Patterns)}";
+
+        public static FileDialogFilter ByAllFiles() => ByPatterns("All files", "*");
         public static FileDialogFilter ByExtensions(string name, params string[] extensions) => ByExtensions(name, extensions.AsEnumerable());
-        public static FileDialogFilter ByExtensions(string name, IEnumerable<string> extensions) => new FileDialogFilter(name, extensions);
+        public static FileDialogFilter ByExtensions(string name, IEnumerable<string> extensions) =>
+            ByPatterns(name, extensions.Select(x => $"*.{x}"));
+        public static FileDialogFilter ByPatterns(string name, params string[] patterns) => ByExtensions(name, patterns.AsEnumerable());
+        public static FileDialogFilter ByPatterns(string name, IEnumerable<string> patterns) => new FileDialogFilter(name, patterns);
     }
 
     public static class FileDialogFilterComposer
@@ -71,142 +76,104 @@ namespace Xe.Tools.Wpf.Dialogs
 
     public class FileDialog
     {
-        public enum Behavior
+        private class WrapperWin32Window : IWin32Window
+        {
+            private readonly Window window;
+
+            public WrapperWin32Window(Window window)
+            {
+                this.window = window;
+            }
+
+            public IntPtr Handle => new System.Windows.Interop.WindowInteropHelper(window).Handle;
+        }
+
+        private enum Behavior
         {
             Open, Save, Folder
         }
 
-        [Obsolete]
-        public enum Type
-        {
-            Any,
-            Executable,
-            XeGameProject,
-            XeAnimation,
-            ImagePng,
-        }
-
-        private CommonFileDialog _fd;
+        private Microsoft.Win32.FileDialog _fd;
+        private FolderBrowserDialog _ffd;
 
         private Window WindowParent { get; }
 
-        [Obsolete]
-        public Behavior CurrentBehavior { get; }
-
         public string DefaultFileName
-		{
-			get => _fd.DefaultFileName;
-			set => _fd.DefaultFileName = value;
-		}
+        {
+            get => _fd?.FileName ?? _ffd.SelectedPath;
+            set
+            {
+                if (_fd != null)
+                    _fd.FileName = value;
+                else if (_ffd != null)
+                    _ffd.SelectedPath = value;
+            }
+        }
 
         public string FileName => _fd.FileName;
 
-        public IEnumerable<string> FileNames => (_fd as CommonOpenFileDialog)?.FileNames ?? new string[] { FileName };
+        public IEnumerable<string> FileNames => _fd?.FileNames ?? new[] { DefaultFileName };
 
-        private FileDialog(CommonFileDialog commonFileDialog, Window wndParent, Behavior behavior)
+        private FileDialog(Microsoft.Win32.FileDialog fileDialog, Window wndParent)
         {
-            _fd = commonFileDialog;
+            _fd = fileDialog;
             WindowParent = wndParent;
-            CurrentBehavior = behavior;
         }
 
-        [Obsolete]
-        public bool? ShowDialog() => InternalShowDialog();
+        private FileDialog(FolderBrowserDialog fileDialog, Window wndParent)
+        {
+            _ffd = fileDialog;
+            WindowParent = wndParent;
+        }
 
         private bool? InternalShowDialog()
         {
-            var result = WindowParent != null ? _fd.ShowDialog(WindowParent) : _fd.ShowDialog();
+            if (_fd != null)
+                return WindowParent == null ? _fd.ShowDialog() : _fd.ShowDialog(WindowParent);
+            else if (_ffd != null)
+                switch ( WindowParent == null ? _ffd.ShowDialog() :
+                    _ffd.ShowDialog(new WrapperWin32Window(WindowParent)))
+                {
+                    case DialogResult.OK: return true;
+                    case DialogResult.Cancel: return null;
+                    case DialogResult.Abort: return false;
+                    case DialogResult.Retry: return true;
+                    case DialogResult.Ignore: return null;
+                    case DialogResult.Yes: return true;
+                    case DialogResult.No: return false;
+                    default: return null;
+                }
 
-            switch (result)
-            {
-                case CommonFileDialogResult.Ok: return true;
-                case CommonFileDialogResult.None: return false;
-                case CommonFileDialogResult.Cancel: return null;
-                default: return null;
-            }
+            return null;
         }
 
-        [Obsolete]
-        public static FileDialog Factory(Window wndParent, Behavior behavior, Type type = Type.Any, bool multipleSelection = false)
-        {
-			var filters = new List<(string, string[])>();
-
-            if (behavior != Behavior.Folder)
-            {
-                switch (type)
-                {
-                    case Type.Any:
-						filters.Add(("All files", new string[] { "*" }));
-                        break;
-                    case Type.Executable:
-						filters.Add(("Application", new string[] { "exe" }));
-                        break;
-                    case Type.XeGameProject:
-						filters.Add(("XeEngine project", new string[] { "proj.json" }));
-                        break;
-                    case Type.XeAnimation:
-						filters.Add(("XeEngine 2D animation", new string[] { "anim.json" }));
-                        break;
-                    case Type.ImagePng:
-						filters.Add(("PNG image", new string[] { "png" }));
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            return Factory(wndParent, behavior, filters, multipleSelection);
-		}
-
-        [Obsolete]
-        public static FileDialog Factory(Window wndParent, Behavior behavior, (string, string) filter, bool multipleSelection = false)
+		private static FileDialog Factory(Window wndParent, Behavior behavior, IEnumerable<FileDialogFilter> filters, bool multipleSelection = false)
 		{
-			return Factory(wndParent, behavior, new(string, string)[] { filter }, multipleSelection);
-		}
+            Microsoft.Win32.FileDialog fd;
 
-        [Obsolete]
-        public static FileDialog Factory(Window wndParent, Behavior behavior, IEnumerable<(string, string)> filters, bool multipleSelection = false)
-		{
-			return Factory(wndParent, behavior, filters.Select(x => (x.Item1, new string[] { x.Item2 })), multipleSelection);
-		}
-
-		public static FileDialog Factory(Window wndParent, Behavior behavior, IEnumerable<(string, string[])> filters, bool multipleSelection = false)
-		{
-			CommonFileDialog fd;
-			switch (behavior)
+            switch (behavior)
 			{
 				case Behavior.Open:
-					fd = new CommonOpenFileDialog()
+					fd = new Microsoft.Win32.OpenFileDialog()
 					{
-						EnsureFileExists = true,
-						Multiselect = multipleSelection
+                        CheckFileExists = true,
+                        CheckPathExists = true,
+						Multiselect = multipleSelection,
 					};
 					break;
 				case Behavior.Save:
-					fd = new CommonSaveFileDialog()
-					{
-
-					};
-					break;
-				case Behavior.Folder:
-					fd = new CommonOpenFileDialog()
-					{
-						IsFolderPicker = true,
-						Multiselect = multipleSelection
-					};
+                    fd = new Microsoft.Win32.SaveFileDialog()
+                    {
+                        CheckPathExists = true,
+                    };
 					break;
 				default:
 					throw new ArgumentException("Invalid parameter", nameof(behavior));
 			}
-			fd.AddToMostRecentlyUsedList = true;
-			fd.EnsurePathExists = true;
 
-			foreach (var filter in filters)
-			{
-				fd.Filters.Add(CreateFilter(filter.Item1, filter.Item2));
-			}
+            fd.Filter = string.Join("|", filters.Select(filter => filter.ToString()));
 
-			return new FileDialog(fd, wndParent, behavior);
+            return new FileDialog(fd, wndParent);
 		}
 
         public static bool? OnOpen(
@@ -215,7 +182,7 @@ namespace Xe.Tools.Wpf.Dialogs
             string defaultFileName = null,
             Window parent = null)
         {
-            var fileDialog = FileDialog.Factory(parent, FileDialog.Behavior.Open, Map(filters));
+            var fileDialog = FileDialog.Factory(parent, FileDialog.Behavior.Open, filters);
             fileDialog.DefaultFileName = defaultFileName;
 
             var result = fileDialog.InternalShowDialog();
@@ -231,7 +198,7 @@ namespace Xe.Tools.Wpf.Dialogs
             string defaultFileName = null,
             Window parent = null)
         {
-            var fileDialog = Factory(parent, FileDialog.Behavior.Open, Map(filters), true);
+            var fileDialog = Factory(parent, Behavior.Open, filters, true);
             fileDialog.DefaultFileName = defaultFileName;
 
             var result = fileDialog.InternalShowDialog();
@@ -247,7 +214,7 @@ namespace Xe.Tools.Wpf.Dialogs
             string defaultFileName = null,
             System.Windows.Window parent = null)
         {
-            var fileDialog = FileDialog.Factory(parent, FileDialog.Behavior.Save, Map(filters));
+            var fileDialog = Factory(parent, Behavior.Save, filters);
             fileDialog.DefaultFileName = defaultFileName;
 
             var result = fileDialog.InternalShowDialog();
@@ -263,7 +230,7 @@ namespace Xe.Tools.Wpf.Dialogs
             string defaultFileName = null,
             System.Windows.Window parent = null)
         {
-            var fileDialog = Factory(parent, Behavior.Folder, Map(filters));
+            var fileDialog = new FileDialog(new FolderBrowserDialog(), parent);
             fileDialog.DefaultFileName = defaultFileName;
 
             var result = fileDialog.InternalShowDialog();
@@ -271,20 +238,6 @@ namespace Xe.Tools.Wpf.Dialogs
                 callback(fileDialog.FileName);
 
             return result;
-        }
-
-        private static IEnumerable<(string, string[])> Map(IEnumerable<FileDialogFilter> filters) =>
-            filters.Select(filter => (filter.Name, filter.Extensions.ToArray()));
-
-        private static CommonFileDialogFilter CreateFilter(string name, string[] filters)
-        {
-            var filter = new CommonFileDialogFilter()
-            {
-                DisplayName = name
-            };
-            foreach (var item in filters)
-                filter.Extensions.Add(item);
-            return filter;
         }
     }
 }
