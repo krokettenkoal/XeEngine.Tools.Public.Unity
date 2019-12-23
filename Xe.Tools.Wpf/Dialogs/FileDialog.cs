@@ -120,7 +120,7 @@ namespace Xe.Tools.Wpf.Dialogs
             }
         }
 
-        public string FileName => _fd.FileName;
+        public string FileName => _fd?.FileName ?? _ffd?.SelectedPath;
 
         public IEnumerable<string> FileNames => _fd?.FileNames ?? new[] { DefaultFileName };
 
