@@ -236,7 +236,6 @@ namespace Xe.Tools.Wpf.Dialogs
 
         public static bool? OnFolder(
             Action<string> callback,
-            IEnumerable<FileDialogFilter> filters = null,
             string defaultFileName = null,
             System.Windows.Window parent = null)
         {
