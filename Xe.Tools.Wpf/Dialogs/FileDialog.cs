@@ -72,6 +72,16 @@ namespace Xe.Tools.Wpf.Dialogs
             filters.Add(FileDialogFilter.ByExtensions(name, extensions));
             return filters;
         }
+        public static List<FileDialogFilter> AddPatterns(this List<FileDialogFilter> filters, string name, params string[] patterns)
+        {
+            filters.Add(FileDialogFilter.ByPatterns(name, patterns));
+            return filters;
+        }
+        public static List<FileDialogFilter> AddPatterns(this List<FileDialogFilter> filters, string name, IEnumerable<string> patterns)
+        {
+            filters.Add(FileDialogFilter.ByPatterns(name, patterns));
+            return filters;
+        }
     }
 
     public class FileDialog
