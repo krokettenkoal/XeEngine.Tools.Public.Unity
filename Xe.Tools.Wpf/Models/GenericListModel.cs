@@ -106,6 +106,12 @@ namespace Xe.Tools.Wpf.Models
 			OnPropertyChanged(nameof(Items));
 		}
 
+		public void Filter(Func<IEnumerable<T>, IEnumerable<T>> selector)
+		{
+			Items = new ObservableCollection<T>(selector(list));
+			OnPropertyChanged(nameof(Items));
+		}
+
         protected virtual T OnNewItem() => throw new NotImplementedException();
 
 		protected virtual void OnSelectedItem(T item)
