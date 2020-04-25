@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Xe.Tools.Wpf.Icons"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="16">
+             d:DesignHeight="800" d:DesignWidth="16">
     <StackPanel>
         <Image Source="{StaticResource Add_16x}" Width="16"/>
         <Image Source="{StaticResource AddFile_16x}" Width="16"/>
@@ -19,8 +19,10 @@
         <Image Source="{StaticResource ClearWindowContent_16x}" Width="16"/>
         <Image Source="{StaticResource Copy_16x}" Width="16"/>
         <Image Source="{StaticResource Document_16x}" Width="16"/>
+        <Image Source="{StaticResource Download_16x}" Width="16"/>
         <Image Source="{StaticResource DynamicImage_16x}" Width="16"/>
         <Image Source="{StaticResource EditTitleString_16x}" Width="16"/>
+        <Image Source="{StaticResource EditWindow_16x}" Width="16"/>
         <Image Source="{StaticResource ExpandChevronRightGroup_16x}" Width="16"/>
         <Image Source="{StaticResource Export_16x}" Width="16"/>
         <Image Source="{StaticResource FileCollection_16x}" Width="16"/>
@@ -36,6 +38,8 @@
         <Image Source="{StaticResource Remove_color_16x}" Width="16"/>
         <Image Source="{StaticResource Restart_16x}" Width="16"/>
         <Image Source="{StaticResource Run_16x}" Width="16"/>
+        <Image Source="{StaticResource Save_16x}" Width="16"/>
+        <Image Source="{StaticResource SaveAs_16x}" Width="16"/>
         <Image Source="{StaticResource Search_16x}" Width="16"/>
         <Image Source="{StaticResource Settings_16x}" Width="16"/>
         <Image Source="{StaticResource SpecialFolder_16x}" Width="16"/>
@@ -47,6 +51,7 @@
         <Image Source="{StaticResource StatusWarning_16x}" Width="16"/>
         <Image Source="{StaticResource Stop_16x}" Width="16"/>
         <Image Source="{StaticResource TableInsideBorder_16x}" Width="16"/>
+        <Image Source="{StaticResource UIAbout_16x}" Width="16"/>
         <Image Source="{StaticResource ZoomIn_16x}" Width="16"/>
         <Image Source="{StaticResource ZoomOut_16x}" Width="16"/>
     </StackPanel>
