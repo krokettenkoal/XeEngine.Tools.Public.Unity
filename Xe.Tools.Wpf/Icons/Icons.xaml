@@ -52,6 +52,7 @@
         <Image Source="{StaticResource Stop_16x}" Width="16"/>
         <Image Source="{StaticResource TableInsideBorder_16x}" Width="16"/>
         <Image Source="{StaticResource UIAbout_16x}" Width="16"/>
+        <Image Source="{StaticResource WebURL_16x}" Width="16"/>
         <Image Source="{StaticResource ZoomIn_16x}" Width="16"/>
         <Image Source="{StaticResource ZoomOut_16x}" Width="16"/>
     </StackPanel>
