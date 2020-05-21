@@ -75,10 +75,6 @@ namespace Xe.Drawing
             {
                 var flags = d3d.DeviceCreationFlags.BgraSupport;
 
-                #if DEBUG
-                flags |= d3d.DeviceCreationFlags.Debug;
-                #endif
-
                 d3dDevice = new d3d.Device(DriverType.Hardware, flags);
                 d3dDevice1 = d3dDevice.QueryInterface<d3d.Device1>();
                 d3dDevice5 = d3dDevice.QueryInterface<d3d.Device5>();
