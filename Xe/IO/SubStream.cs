@@ -41,7 +41,7 @@ namespace Xe.IO
 
 		public override bool CanSeek => true;
 
-		public override bool CanWrite => false;
+		public override bool CanWrite => true;
 
 		public override long Length => _length;
 
@@ -64,10 +64,7 @@ namespace Xe.IO
 			_position = 0;
 		}
 
-		public override void Flush()
-		{
-			throw new NotImplementedException();
-		}
+		public override void Flush() => _baseStream.Flush();
 
 		public override int Read(byte[] buffer, int offset, int count)
 		{
@@ -103,7 +100,13 @@ namespace Xe.IO
 
 		public override void Write(byte[] buffer, int offset, int count)
 		{
-			throw new NotSupportedException();
+			lock (_baseStream)
+			{
+				_baseStream.Position = _offset + Position;
+				var toWrite = (int)Math.Min(count, Length - Position);
+				_baseStream.Write(buffer, 0, toWrite);
+				_position += toWrite;
+			}
 		}
 	}
 }
