@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Xe.Tools.Utilities;
 
 namespace Xe.Tools
 {
@@ -39,6 +40,8 @@ namespace Xe.Tools
 	/// <typeparam name="T"></typeparam>
 	public static class Plugins
 	{
+		private readonly static PluginLoadContext loader = new PluginLoadContext();
+
 		public static IEnumerable<(Assembly, Type)> GetPlugins(string folder, Func<string, bool> assemblyFilter,
 			Func<Type, bool> typeFilter)
 		{
@@ -54,7 +57,7 @@ namespace Xe.Tools
 			var plugins = new List<(Assembly, Type)>();
 			foreach (var file in fileNames)
 			{
-				var assembly = Assembly.LoadFile(file);
+				var assembly = loader.LoadFromAssemblyPath(file);
 				foreach (var type in assembly.GetTypes())
 				{
 					if (typeFilter.Invoke(type))
