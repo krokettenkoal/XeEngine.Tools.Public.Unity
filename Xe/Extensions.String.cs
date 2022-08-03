@@ -25,20 +25,22 @@
 // Please do not redistribuite this code under your own name, stole it or use
 // it artfully, but instead support it and its author. Thank you.
 
+using System.IO;
+
 namespace Xe
 {
-	public static partial class Extensions
-	{
-		/// <summary>
-		/// Open a binary file from the given file name in read mode.
-		/// </summary>
-		/// <param name="fileName"></param>
-		/// <returns></returns>
-		public static BinaryReader ReadBinaryFile(this string fileName)
-		{
-			if (!File.Exists(fileName))
-				return null;
-			return new BinaryReader(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
-		}
-	}
+    public static partial class Extensions
+    {
+        /// <summary>
+        /// Open a binary file from the given file name in read mode.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static BinaryReader ReadBinaryFile(this string fileName)
+        {
+            if (!File.Exists(fileName))
+                return null;
+            return new BinaryReader(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+        }
+    }
 }
